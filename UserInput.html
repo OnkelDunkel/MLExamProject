@@ -8,8 +8,6 @@
   <meta name="description" content="The HTML5 Herald">
   <meta name="author" content="SitePoint">
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
-
 </head>
 
 <body>
@@ -18,8 +16,8 @@
 	
 	<div>
 		<label for="workBalance">How much do you value work/life balance in your job?</label>
-		<select id="workBalance">
-			<option value=0></option>
+		<select id="workBalance" data-csv="work-balance-stars">
+			<option style="display:none;" value=""></option>
 			<option value=1>1</option>
 			<option value=2>2</option>
 			<option value=3>3</option>
@@ -30,7 +28,8 @@
 	
 	<div>
 		<label for="culture">How important is the company culture for you?</label>
-		<select id="culture">
+		<select id="culture" data-csv="culture-values-stars">
+			<option style="display:none;" value=""></option>
 			<option value=1>1</option>
 			<option value=2>2</option>
 			<option value=3>3</option>
@@ -41,7 +40,8 @@
 	
 	<div>
 		<label for="career">How much important is it for you to be able to further improve on the career in the company?</label>
-		<select id="career">
+		<select id="career" data-csv="carrer-opportunities-stars">
+			<option style="display:none;" value=""></option>
 			<option value=1>1</option>
 			<option value=2>2</option>
 			<option value=3>3</option>
@@ -52,7 +52,8 @@
 	
 	<div>
 		<label for="compBenefit">How much do you value company benefits/compensation?</label>
-		<select id="compBenefit">
+		<select id="compBenefit" data-csv="comp-benefit-stars">
+			<option style="display:none;" value=""></option>
 			<option value=1>1</option>
 			<option value=2>2</option>
 			<option value=3>3</option>
@@ -63,7 +64,8 @@
 	
 	<div>
 		<label for="seniorManagement">How important is it for you to have a good relationship to the senior management?</label>
-		<select id="seniorManagement">
+		<select id="seniorManagement" data-csv="senior-mangemnet-stars">
+			<option style="display:none;" value=""></option>
 			<option value=1>1</option>
 			<option value=2>2</option>
 			<option value=3>3</option>
@@ -73,8 +75,37 @@
 	</div>
 	
 	<div>
-		<input type="button" value="Submit answer"/>
+		<input id="createCsv" type="button" value="Genereate CSV"/>
 	</div>
 	
+	<script>
+		
+		var createFile = function() {
+			var selects = document.querySelectorAll("select");
+			var cols = "";
+			var vals = "";
+			
+			[].forEach.call(selects, function(el) {
+				if (cols != "") cols += ",";
+				if (vals != "") vals += ",";
+				cols += el.getAttribute("data-csv");
+				vals += el.value;
+			});
+			var out = cols + "\n" + vals;
+			console.log(out);
+			
+			
+			var element = document.createElement('a');
+			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(out));
+			element.setAttribute('download', "user_input.csv");
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+		}
+		document.getElementById("createCsv").addEventListener("click", createFile);
+	</script>
 </body>
 </html>
